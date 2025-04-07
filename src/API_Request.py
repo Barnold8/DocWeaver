@@ -43,7 +43,6 @@ def generateRequest(url: str, reqType: RequestType, data: dict[str, Any]) -> str
 
     ERROR_HEADER_LEN = 70
     headers = {"Content-Type": "application/json"}
-    r = None
 
     # if reqType == RequestType.GET:
     #     r = requests.get(url, headers=headers, params=data)
