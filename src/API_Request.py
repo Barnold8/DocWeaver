@@ -50,10 +50,11 @@ def generateRequest(url: str, reqType: RequestType, data: dict[str, Any]) -> str
     #         return r
     #     else:
     #         raise ValueError("\n\n" + "="*ERROR_HEADER_LEN + f"\n\n\tPOST_ERROR:\n\n\t  Status: {r.status_code}"+f"\n\n\t Body: {r.text}\n\n"+"="*ERROR_HEADER_LEN)
+
     if reqType == RequestType.POST:
         r = requests.post(url, headers=headers, json=data)
         if r.status_code >= 200 and r.status_code <= 299:
-            return r
+            return r.text
         else:
             raise ValueError("\n\n" + "="*ERROR_HEADER_LEN + f"\n\n\tPOST_ERROR:\n\n\t  Status: {r.status_code}"+f"\n\n\t Body: {r.text}\n\n"+"="*ERROR_HEADER_LEN)
 
