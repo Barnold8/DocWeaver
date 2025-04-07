@@ -1,13 +1,20 @@
 from API_Request import *
 from file import *
-import os
+import warnings
+
 
 # The file path "API_KEY" has to be the path to your api key for gemini (relative to main.py for simplicity sakes)
 
 if __name__ == "__main__":
-        
-    PATH = file_path = os.path.realpath(__file__).split("main.py")[0]
 
-    API_KEY = loadApiKey(PATH+"API_KEY")
+    warnings.filterwarnings("ignore", message="invalid escape sequence '\\.'", category=SyntaxWarning) # ignore annoying escape char with regex warning
 
-    print(geminiRequest(API_KEY))
+    # PATH = file_path = os.path.realpath(__file__).split("main.py")[0]
+
+    # API_KEY = loadApiKey(PATH+"API_KEY")
+
+    # print(geminiRequest(API_KEY))
+
+    loadFilePaths(".",["^[^I]*I[^I]*$"])
+
+
