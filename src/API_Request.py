@@ -40,18 +40,18 @@ def geminiRequest(API_KEY: str):
 
 
 def generateRequest(url: str, reqType: RequestType, data: dict[str, Any]) -> str:
-    
+
     ERROR_HEADER_LEN = 70
     headers = {"Content-Type": "application/json"}
     r = None
 
-    if reqType == RequestType.GET:
-        r = requests.get(url, headers=headers, params=data)
-        if r.status_code >= 200 and r.status_code <= 299:
-            return r
-        else:
-            raise ValueError("\n\n" + "="*ERROR_HEADER_LEN + f"\n\n\tPOST_ERROR:\n\n\t  Status: {r.status_code}"+f"\n\n\t Body: {r.text}\n\n"+"="*ERROR_HEADER_LEN)
-    elif reqType == RequestType.POST:
+    # if reqType == RequestType.GET:
+    #     r = requests.get(url, headers=headers, params=data)
+    #     if r.status_code >= 200 and r.status_code <= 299:
+    #         return r
+    #     else:
+    #         raise ValueError("\n\n" + "="*ERROR_HEADER_LEN + f"\n\n\tPOST_ERROR:\n\n\t  Status: {r.status_code}"+f"\n\n\t Body: {r.text}\n\n"+"="*ERROR_HEADER_LEN)
+    if reqType == RequestType.POST:
         r = requests.post(url, headers=headers, json=data)
         if r.status_code >= 200 and r.status_code <= 299:
             return r
