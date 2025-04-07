@@ -13,7 +13,7 @@ class RequestType(Enum):
 
 def geminiRequest(API_KEY: str):
 
-    generateRequest(f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={API_KEY}",RequestType.POST,{
+    return generateRequest(f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={API_KEY}",RequestType.POST,{
     "contents": [
         {
         "parts": [
