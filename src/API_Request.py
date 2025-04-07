@@ -9,18 +9,6 @@ class RequestType(Enum):
     PUT     = 2
     DELETE  = 3
 
-def loadApiKey(path: str):
-    
-    key = None
-
-    try:
-        with open(path,"r") as file:
-            key = file.readline()
-    except FileNotFoundError as err:
-        print(f"FILE_ERROR: {err}")
-        exit(1)
-
-    return key
 
 
 def geminiRequest(API_KEY: str):
@@ -36,7 +24,6 @@ def geminiRequest(API_KEY: str):
             }
         ]
     })
-
 
 
 def generateRequest(url: str, reqType: RequestType, data: dict[str, Any]) -> str:
