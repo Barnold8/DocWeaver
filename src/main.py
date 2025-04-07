@@ -1,6 +1,8 @@
 from API_Request import *
 import os
 
+# The file path "API_KEY" has to be the path to your api key for gemini (relative to main.py for simplicity sakes)
+
 if __name__ == "__main__":
         
     PATH = file_path = os.path.realpath(__file__).split("main.py")[0]
