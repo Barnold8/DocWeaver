@@ -22,6 +22,9 @@ class File:
                         # key: [function as string chunks]
 
 
+def needsChunked(filePath: str, byteSizeThreshold: int = 1064) -> bool :
+    return os.path.getsize(filePath) > byteSizeThreshold
+
 def compilePatterns(patterns:List[str]) -> List[Pattern]: # not file specific so could be moved elsewhere
     return [re.compile(pattern) for pattern in patterns]
 
@@ -64,9 +67,9 @@ def loadApiKey(path: str):
 def loadFilePaths(root: str, patterns: List[str] = []) -> List[str]:
     return getFiles(relativePath(root),compilePatterns(patterns))
 
-def writeCommentedFile(contents: dict, fileName: str = "example2") -> bool: # maybe return bool to signal success or failure
+def writeCommentedFile(contents: dict, fileName: str = "example2") -> bool: 
 
-    contentChunks = contents["candidates"][0]["content"]["parts"] #[0]["text"]
+    contentChunks = contents["candidates"][0]["content"]["parts"]
 
     try:
         with open(fileName,"w") as newFile:
