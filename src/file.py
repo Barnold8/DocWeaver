@@ -47,11 +47,11 @@ def loadFilePaths(root: str, patterns: List[str] = []) -> List[str]:
 
 def fileChunking(filePaths: List[str],chunkWidth: int = 4096 ) -> str:
 
-    chunks = []
-    globalChunk = ""
-    chunkSize = 0
-    formatString = ""
-    formatHeaderLength = 9
+    chunks              = []
+    globalChunk         = ""
+    formatString        = ""
+    chunkSize           = 0
+    formatHeaderLength  = 9
 
     for file in filePaths:
         with open(file, "r",encoding="utf-8") as f: 
