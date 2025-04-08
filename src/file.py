@@ -1,4 +1,5 @@
 from typing import List,Pattern
+from API_Request import *
 import os
 import re
 
@@ -79,8 +80,11 @@ def writeCommentedFile(contents: dict, fileName: str = "example2") -> bool:
 
     contentChunks = contents["candidates"][0]["content"]["parts"]
 
+    if(os.path.isdir(relativePath("CommentedCode")) == False):
+        os.mkdir(relativePath("CommentedCode"))
+   
     try:
-        with open(fileName,"w") as newFile:
+        with open(relativePath("CommentedCode")+"\\"+fileName,"w") as newFile:
             for chunk in contentChunks:
                 textSplit = chunk["text"].split("<linebreak>")
                 for line in textSplit:
@@ -88,48 +92,33 @@ def writeCommentedFile(contents: dict, fileName: str = "example2") -> bool:
     except FileNotFoundError as err:
         print(f"FILE_ERROR: Problem writing {fileName}\n\n{err}")
         return False
+    
     return True
 
 def chunkByFunction():
     pass
 
-def handleFiles(folderPath:str,patterns: List[str], API_KEY: str):
-    # for loop over files and run either geminiRequestAll or geminiRequestChunked
+def handleFiles(folderPath:str,patterns: List[str], API_KEY: str,byteSizeThreshold: int = 1064):
+    
     files = [file for file in getFiles(folderPath,patterns) if matchesPattern(file,patterns)]
 
+    # for loop over files and run either geminiRequestAll or geminiRequestChunked
     for file in files:
-        print(file)
+        
+        if needsChunked(file,byteSizeThreshold):
+            pass
+        else:
+            with open(file,"r",encoding='utf-8') as code:
+                
+                fileName = file.split("\\")
+                fileName = fileName[len(fileName)-1]
 
-## the bin
+                print("FILENAME ",fileName)
+
+                writeCommentedFile(
+                    geminiRequestAll(API_KEY,code.read()),
+                    fileName
+                )
 
 
-# def fileChunking(filePaths: List[str],chunkWidth: int = 4096 ) -> List[str]:
 
-#     # functions = None
-#     # functionBuffer = ""
-#     # writingFunction = False
-
-#     for file in filePaths:
-#          with open(file, "r",encoding="utf-8") as f: 
-#             lines = f.readlines()
-            
-#             fileObject = File(
-#                 filePath = file,
-#                 fileName = file.split("\\")[1],
-#             )
-            
-#             print(f"File:\n\n\tName: {fileObject.fileName}\n\tFilePath: {fileObject.filePath}\n")
-
-#             l = []
-#             for line in lines:
-#                 l.append(line)
-
-#             # for line in lines:
-#             #     if not writingFunction and "def" in line:
-#             #         writingFunction = True
-#             #         functionBuffer += line
-#             #     elif "def" in line:
-#             #         print(functionBuffer)
-#             #         exit()
-#             #     else:
-#             #         functionBuffer += line

@@ -32,9 +32,6 @@ if __name__ == "__main__":
     handleFiles(
         relativePath(args.path),
         args.patterns,
-        loadApiKey(relativePath(args.API_KEY_PATH))
+        loadApiKey(relativePath(args.API_KEY_PATH)),
+        args.size
     )
-
-    # with open(relativePath("file.py"),"r",encoding="utf-8") as file:
-    #     request = geminiRequestAll(API_KEY,file.read())
-    #     writeCommentedFile(request,relativePath("file2.py"))
