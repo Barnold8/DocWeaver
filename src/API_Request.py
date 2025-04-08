@@ -9,8 +9,6 @@ class RequestType(Enum):
     PUT     = 2
     DELETE  = 3
 
-
-
 def geminiRequestAll(API_KEY: str, payload):
 
     return generateRequest(f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={API_KEY}",RequestType.POST,{
@@ -25,18 +23,25 @@ def geminiRequestAll(API_KEY: str, payload):
         ]
     })
 
+def geminiRequestChunked(API_KEY: str, payload):
+     
+    generateRequest(f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={API_KEY}",RequestType.POST,{
+        "contents": [
+            {
+            "parts": [
+                {
+                "text":payload
+                    }
+                ]
+            }
+        ]
+    })
+    
 
 def generateRequest(url: str, reqType: RequestType, data: dict[str, Any]) -> dict:
 
     ERROR_HEADER_LEN = 70
     headers = {"Content-Type": "application/json"}
-
-    # if reqType == RequestType.GET:
-    #     r = requests.get(url, headers=headers, params=data)
-    #     if r.status_code >= 200 and r.status_code <= 299:
-    #         return r
-    #     else:
-    #         raise ValueError("\n\n" + "="*ERROR_HEADER_LEN + f"\n\n\tPOST_ERROR:\n\n\t  Status: {r.status_code}"+f"\n\n\t Body: {r.text}\n\n"+"="*ERROR_HEADER_LEN)
 
     if reqType == RequestType.POST:
         r = requests.post(url, headers=headers, json=data)
