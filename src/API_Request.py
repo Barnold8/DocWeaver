@@ -11,14 +11,14 @@ class RequestType(Enum):
 
 
 
-def geminiRequest(API_KEY: str, payload):
+def geminiRequestAll(API_KEY: str, payload):
 
     return generateRequest(f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={API_KEY}",RequestType.POST,{
     "contents": [
         {
         "parts": [
             {
-            "text": f"Please write docstrings to explain what each part of code does. You need to write <linebreak> instead of '\\n'\n\n {payload}"
+            "text": f"Please write docstrings to explain what each part of code does. You need to write <linebreak> instead of '\\n'\n\n. DO NOT contain the markdown for code highlighting like '```c```'\n\n\n {payload}"
                 }
             ]
             }
