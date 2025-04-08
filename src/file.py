@@ -21,11 +21,21 @@ class File:
                             # or
                         # key: [function as string chunks]
 
-def needsChunked(filePath: str, byteSizeThreshold: int = 1064) -> bool :
-    return os.path.getsize(filePath) > byteSizeThreshold
+def matchesPattern(text:str,patterns: List[str]) -> bool:
+
+    if len(patterns) <= 0: # if theres no regex to match with, just allow all
+        return True
+
+    for pattern in patterns:
+        if re.match(pattern,text):
+            return True
+    return False
 
 def compilePatterns(patterns:List[str]) -> List[Pattern]: # not file specific so could be moved elsewhere
     return [re.compile(pattern) for pattern in patterns]
+
+def needsChunked(filePath: str, byteSizeThreshold: int = 1064) -> bool :
+    return os.path.getsize(filePath) > byteSizeThreshold
 
 def getFiles(root,patterns: List[Pattern])-> List[str]:
 
@@ -81,9 +91,13 @@ def writeCommentedFile(contents: dict, fileName: str = "example2") -> bool:
 def chunkByFunction():
     pass
 
-def handleFiles():
+def handleFiles(folderPath:str,patterns: List[str], API_KEY: str):
     # for loop over files and run either geminiRequestAll or geminiRequestChunked
-    pass
+
+    files = [file for file in getFiles(folderPath,patterns) if matchesPattern(file,patterns)]
+
+    for file in files:
+        print(file)
 
 ## the bin
 

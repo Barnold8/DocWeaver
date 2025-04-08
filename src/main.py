@@ -2,6 +2,7 @@ from API_Request import *
 from file import *
 from argHandler import *
 import warnings
+import sys
 
 
 # The file path "API_KEY" has to be the path to your api key for gemini (relative to main.py for simplicity sakes)
@@ -26,9 +27,14 @@ if __name__ == "__main__":
 
     warnings.filterwarnings("ignore", message="invalid escape sequence '\\.'", category=SyntaxWarning) # ignore annoying escape char with regex warning
 
-    API_KEY = loadApiKey(relativePath("API_KEY"))
+    args = handleArgs()
 
+    handleFiles(
+        relativePath(args.path),
+        args.patterns,
+        loadApiKey(relativePath(args.API_KEY_PATH))
+    )
 
-    with open(relativePath("file.py"),"r",encoding="utf-8") as file:
-        request = geminiRequestAll(API_KEY,file.read())
-        writeCommentedFile(request,relativePath("file2.py"))
+    # with open(relativePath("file.py"),"r",encoding="utf-8") as file:
+    #     request = geminiRequestAll(API_KEY,file.read())
+    #     writeCommentedFile(request,relativePath("file2.py"))
