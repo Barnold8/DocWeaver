@@ -2,7 +2,6 @@ from typing import List,Pattern
 import os
 import re
 
-
 class File:
 
     x = 5
@@ -65,49 +64,54 @@ def loadApiKey(path: str):
 def loadFilePaths(root: str, patterns: List[str] = []) -> List[str]:
     return getFiles(relativePath(root),compilePatterns(patterns))
 
-# TODO: chunk per function since this will be very unlikely to exceed token limit of gemini
-
-def fileChunking(filePaths: List[str],chunkWidth: int = 4096 ) -> List[str]:
-
-    # functions = None
-
-    # functionBuffer = ""
-    # writingFunction = False
-    
-
-    for file in filePaths:
-         with open(file, "r",encoding="utf-8") as f: 
-            lines = f.readlines()
-            
-            fileObject = File(
-                filePath = file,
-                fileName = file.split("\\")[1],
-            )
-            
-            print(f"File:\n\n\tName: {fileObject.fileName}\n\tFilePath: {fileObject.filePath}\n")
-
-            l = []
-            for line in lines:
-                l.append(line)
-
-
-
-            # for line in lines:
-            #     if not writingFunction and "def" in line:
-            #         writingFunction = True
-            #         functionBuffer += line
-            #     elif "def" in line:
-            #         print(functionBuffer)
-            #         exit()
-            #     else:
-            #         functionBuffer += line
-
-def writeCommentedFile(contents: dict) -> None: # maybe return bool to signal success or failure
+def writeCommentedFile(contents: dict, fileName: str = "example2") -> bool: # maybe return bool to signal success or failure
 
     contentChunks = contents["candidates"][0]["content"]["parts"] #[0]["text"]
 
-    with open("example2.c","w") as newFile:
-        for chunk in contentChunks:
-            textSplit = chunk["text"].split("<linebreak>")
-            for line in textSplit:
-                newFile.writelines(line)
+    try:
+        with open(fileName,"w") as newFile:
+            for chunk in contentChunks:
+                textSplit = chunk["text"].split("<linebreak>")
+                for line in textSplit:
+                    newFile.writelines(line)
+    except FileNotFoundError as err:
+        print(f"FILE_ERROR: Problem writing {fileName}\n\n{err}")
+        return False
+    return True
+
+
+
+
+## the bin
+
+
+# def fileChunking(filePaths: List[str],chunkWidth: int = 4096 ) -> List[str]:
+
+#     # functions = None
+#     # functionBuffer = ""
+#     # writingFunction = False
+
+#     for file in filePaths:
+#          with open(file, "r",encoding="utf-8") as f: 
+#             lines = f.readlines()
+            
+#             fileObject = File(
+#                 filePath = file,
+#                 fileName = file.split("\\")[1],
+#             )
+            
+#             print(f"File:\n\n\tName: {fileObject.fileName}\n\tFilePath: {fileObject.filePath}\n")
+
+#             l = []
+#             for line in lines:
+#                 l.append(line)
+
+#             # for line in lines:
+#             #     if not writingFunction and "def" in line:
+#             #         writingFunction = True
+#             #         functionBuffer += line
+#             #     elif "def" in line:
+#             #         print(functionBuffer)
+#             #         exit()
+#             #     else:
+#             #         functionBuffer += line
