@@ -2,19 +2,24 @@ import argparse
 
 class Args:
 
-    def __init__(self,size: int,path: str, patterns: list[str],api_key):
+    def __init__(self,size: int,path: str, patterns: list[str],API_KEY_PATH:str):
         
         self.size = size
         self.path = path
         self.patterns = patterns
-        self.API_KEY = api_key
+        self.API_KEY_PATH = API_KEY_PATH
 
 
     def debugPrint(self):
 
         print(
-            f"Args:\n\n\tsize: {self.args}\n\tpath: {self.path}\n\tpatterns: {self.patterns}"
-        )
+            f"""Args:
+                size: {self.size}
+                path: {self.path}
+                patterns: {self.patterns}
+                api_key: {self.API_KEY_PATH}
+            """
+            )
 
 def argInit() -> argparse.Namespace:
     parser =  argparse.ArgumentParser()
