@@ -18,7 +18,7 @@ def geminiRequestAll(API_KEY: str, payload):
         {
         "parts": [
             {
-            "text": f"Please write docstrings to explain what each part of code does. You need to write <linebreak> instead of '\\n'\n\n. DO NOT contain the markdown for code highlighting like '```c```'\n\n\n {payload}"
+             "text":f"Please write docstrings to explain what each part of code does. You need to write <linebreak> instead of '\\n'. Ensure the output is plain text and does not include any code formatting or syntax highlighting. PRESERVE ALL OF THE IMPORTS/INCLUDES Heres the code: {payload}"
                 }
             ]
             }
