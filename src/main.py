@@ -30,8 +30,8 @@ if __name__ == "__main__":
     args = handleArgs()
 
     handleFiles(
-        relativePath(args.path),
+        args.path,
         args.patterns,
-        loadApiKey(relativePath(args.API_KEY_PATH)),
+        loadApiKey(args.API_KEY_PATH),
         args.size
     )

@@ -80,11 +80,11 @@ def writeCommentedFile(contents: dict, fileName: str = "example2") -> bool:
 
     contentChunks = contents["candidates"][0]["content"]["parts"]
 
-    if(os.path.isdir(relativePath("CommentedCode")) == False):
-        os.mkdir(relativePath("CommentedCode"))
+    if(os.path.isdir("CommentedCode") == False):
+        os.mkdir("CommentedCode")
    
     try:
-        with open(relativePath("CommentedCode")+"\\"+fileName,"w") as newFile:
+        with open("CommentedCode"+"\\"+fileName,"w") as newFile:
             for chunk in contentChunks:
                 textSplit = chunk["text"].split("<linebreak>")
                 for line in textSplit:
