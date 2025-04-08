@@ -5,13 +5,23 @@ import re
 
 class File:
 
+    x = 5
+
     def __init__(self,fileName,filePath):
         self.fileName = fileName
         self.filePath = filePath
+        self.imports = [] # a list of strings that just say what imports are in a given file
+
+        self.classes = None # this needs to be a dict that has the form 
+                        # key: "whole class as string"
+                            # or
+                        # key: [class as string chunks]
+
         self.functions = None # this needs to be a dict that has the form 
                         # key: "whole function as string"
                             # or
                         # key: [function as string chunks]
+
 
 def compilePatterns(patterns:List[str]) -> List[Pattern]: # not file specific so could be moved elsewhere
     return [re.compile(pattern) for pattern in patterns]
@@ -59,23 +69,45 @@ def loadFilePaths(root: str, patterns: List[str] = []) -> List[str]:
 
 def fileChunking(filePaths: List[str],chunkWidth: int = 4096 ) -> List[str]:
 
-    functions = None
+    # functions = None
 
-    functionBuffer = ""
-    writingFunction = False
+    # functionBuffer = ""
+    # writingFunction = False
     
 
     for file in filePaths:
          with open(file, "r",encoding="utf-8") as f: 
             lines = f.readlines()
-            for line in lines:
-                if not writingFunction and "def" in line:
-                    writingFunction = True
-                    functionBuffer += line
-                elif "def" in line:
-                    print(functionBuffer)
-                    exit()
-                else:
-                    functionBuffer += line
-
             
+            fileObject = File(
+                filePath = file,
+                fileName = file.split("\\")[1],
+            )
+            
+            print(f"File:\n\n\tName: {fileObject.fileName}\n\tFilePath: {fileObject.filePath}\n")
+
+            l = []
+            for line in lines:
+                l.append(line)
+
+
+
+            # for line in lines:
+            #     if not writingFunction and "def" in line:
+            #         writingFunction = True
+            #         functionBuffer += line
+            #     elif "def" in line:
+            #         print(functionBuffer)
+            #         exit()
+            #     else:
+            #         functionBuffer += line
+
+def writeCommentedFile(contents: dict) -> None: # maybe return bool to signal success or failure
+
+    contentChunks = contents["candidates"][0]["content"]["parts"] #[0]["text"]
+
+    with open("example2.c","w") as newFile:
+        for chunk in contentChunks:
+            textSplit = chunk["text"].split("<linebreak>")
+            for line in textSplit:
+                newFile.writelines(line)
