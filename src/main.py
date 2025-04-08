@@ -15,6 +15,11 @@ if __name__ == "__main__":
 
     # print(geminiRequest(API_KEY))
 
-    loadFilePaths(".",["^[^I]*I[^I]*$"])
+    fileChunking(
+        loadFilePaths(".",["^.*\.py$"]),
+        
+    )
+
+    
 
 

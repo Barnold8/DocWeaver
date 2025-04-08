@@ -42,6 +42,56 @@ def loadApiKey(path: str):
 
     return key
 
-
 def loadFilePaths(root: str, patterns: List[str] = []) -> List[str]:
     return getFiles(relativePath(root),compilePatterns(patterns))
+
+def fileChunking(filePaths: List[str],chunkWidth: int = 4096 ) -> str:
+    
+    chunks = []
+    globalChunk = ""
+    chunkSize = 0
+    formatString = ""
+    formatHeaderLength = 9
+   
+
+    for file in filePaths:
+        with open(file, "r",encoding="utf-8") as f: 
+
+            fileName = file.split("\\")
+            fileName = fileName[len(fileName)-1]
+            
+            formatString = "="*formatHeaderLength + f"\n\nFILE: {fileName}\nPATH:{file}\ncontents:\n"
+            
+            if len(globalChunk) - len(formatString) > chunkWidth:
+                chunkSize = len(formatString)
+                chunks.append(globalChunk)
+                globalChunk += formatString
+                globalChunk = "" 
+            else:
+                
+                chunkSize += len(formatString)
+                globalChunk += formatString
+
+
+            lines = f.readlines()
+
+            for line in lines:
+                if len(globalChunk) - len(line)  > chunkWidth:
+                    chunkSize = len(line)
+                    chunks.append(globalChunk)
+                    globalChunk += line
+                    globalChunk = "" 
+                else:
+                    chunkSize += len(line)
+                    globalChunk += line
+
+
+
+    if len(globalChunk) > 0:
+        chunks.append(globalChunk)
+
+    for chunk in chunks:
+        print("$"*formatHeaderLength+f"\n\nCHUNK:\n{chunk}")
+
+
+
