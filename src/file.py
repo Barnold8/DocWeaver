@@ -46,13 +46,12 @@ def loadFilePaths(root: str, patterns: List[str] = []) -> List[str]:
     return getFiles(relativePath(root),compilePatterns(patterns))
 
 def fileChunking(filePaths: List[str],chunkWidth: int = 4096 ) -> str:
-    
+
     chunks = []
     globalChunk = ""
     chunkSize = 0
     formatString = ""
     formatHeaderLength = 9
-   
 
     for file in filePaths:
         with open(file, "r",encoding="utf-8") as f: 
@@ -85,13 +84,12 @@ def fileChunking(filePaths: List[str],chunkWidth: int = 4096 ) -> str:
                     chunkSize += len(line)
                     globalChunk += line
 
-
-
-    if len(globalChunk) > 0:
+    if len(globalChunk) > 0: 
         chunks.append(globalChunk)
+        chunks.append("="*formatHeaderLength+"\n\nEND OF THE FILE CHUNKS")
 
     for chunk in chunks:
         print("$"*formatHeaderLength+f"\n\nCHUNK:\n{chunk}")
 
-
+    return chunks
 
