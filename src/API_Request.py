@@ -11,14 +11,14 @@ class RequestType(Enum):
 
 
 
-def geminiRequest(API_KEY: str):
+def geminiRequest(API_KEY: str, payload):
 
     return generateRequest(f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={API_KEY}",RequestType.POST,{
     "contents": [
         {
         "parts": [
             {
-            "text": "Explain how AI works in a few words"
+            "text": f"Please write docstrings to explain what each part of code does. You need to write <linebreak> instead of '\\n'\n\n {payload}"
                 }
             ]
             }
@@ -26,7 +26,7 @@ def geminiRequest(API_KEY: str):
     })
 
 
-def generateRequest(url: str, reqType: RequestType, data: dict[str, Any]) -> str:
+def generateRequest(url: str, reqType: RequestType, data: dict[str, Any]) -> dict:
 
     ERROR_HEADER_LEN = 70
     headers = {"Content-Type": "application/json"}
@@ -41,7 +41,7 @@ def generateRequest(url: str, reqType: RequestType, data: dict[str, Any]) -> str
     if reqType == RequestType.POST:
         r = requests.post(url, headers=headers, json=data)
         if r.status_code >= 200 and r.status_code <= 299:
-            return r.text
+            return r.json()
         else:
             raise ValueError("\n\n" + "="*ERROR_HEADER_LEN + f"\n\n\tPOST_ERROR:\n\n\t  Status: {r.status_code}"+f"\n\n\t Body: {r.text}\n\n"+"="*ERROR_HEADER_LEN)
 
