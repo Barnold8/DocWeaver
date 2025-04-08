@@ -1,10 +1,10 @@
 from API_Request import *
 from file import *
+from argHandler import *
 import warnings
 
 
 # The file path "API_KEY" has to be the path to your api key for gemini (relative to main.py for simplicity sakes)
-
 
 # idea is chunk via a length in the code, maybe every n words, 
 # and have it synopsise up until that point, 
@@ -14,10 +14,13 @@ import warnings
 
 # example 
 
-#CHUNK 4: def writeline()
+#CHUNK 4: def writeline() | language python | args [] | imports [] | return type None
+#Current synopsis of function: <gemini current synopsis>
+
 #Contents:
 # code here
-
+# when you get to the end of a function (usually because youve found the EOF or another function declaration) prompt gemini with the synopsis of the function and tell it to write a docstring for it
+# somehow add that docstring in
 
 if __name__ == "__main__":
 
@@ -25,19 +28,7 @@ if __name__ == "__main__":
 
     API_KEY = loadApiKey(relativePath("API_KEY"))
 
-    with open(relativePath("example.c"),"r",encoding="utf-8") as file:
-        request = geminiRequest(API_KEY,file.read())
-        writeCommentedFile(request)
-    
-    # fileChunks = fileChunking(
-    #     loadFilePaths(".",["^.*\.py$"]),
-    #     100000
-    # )
 
-
-
-
-
-    
-
-
+    with open(relativePath("file.py"),"r",encoding="utf-8") as file:
+        request = geminiRequestAll(API_KEY,file.read())
+        writeCommentedFile(request,relativePath("file2.py"))
