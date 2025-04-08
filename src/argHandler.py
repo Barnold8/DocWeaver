@@ -29,7 +29,7 @@ def argInit() -> argparse.Namespace:
     parser.add_argument("-a","--api",help="the path to the location of your API key [DEFAULT IS THE CURRENT PATH + API_KEY]",default="API_KEY")
     return parser.parse_args()
 
-def handleArgs(args)-> Args:
+def handleArgs()-> Args:
 
     parser = argInit()
 
