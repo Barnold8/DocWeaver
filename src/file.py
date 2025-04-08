@@ -21,12 +21,8 @@ class File:
                             # or
                         # key: [function as string chunks]
 
-
 def needsChunked(filePath: str, byteSizeThreshold: int = 1064) -> bool :
     return os.path.getsize(filePath) > byteSizeThreshold
-
-def chunkByFunction():
-    pass
 
 def compilePatterns(patterns:List[str]) -> List[Pattern]: # not file specific so could be moved elsewhere
     return [re.compile(pattern) for pattern in patterns]
@@ -82,11 +78,12 @@ def writeCommentedFile(contents: dict, fileName: str = "example2") -> bool:
         return False
     return True
 
+def chunkByFunction():
+    pass
+
 def handleFiles():
     # for loop over files and run either geminiRequestAll or geminiRequestChunked
     pass
-
-
 
 ## the bin
 
