@@ -10,6 +10,7 @@ import warnings
 # and have it synopsise up until that point, 
 # and when that section is parsed, generate a new synopsis talking about that class or function
 # each chunk contains the current function being synopsised
+# may have to define bindings for programming language since each lang defines functions differently, [func,def,function,...] etc
 
 # example 
 
@@ -22,15 +23,12 @@ if __name__ == "__main__":
 
     warnings.filterwarnings("ignore", message="invalid escape sequence '\\.'", category=SyntaxWarning) # ignore annoying escape char with regex warning
 
-    # PATH = file_path = os.path.realpath(__file__).split("main.py")[0]
     API_KEY = loadApiKey(relativePath("API_KEY"))
 
     with open(relativePath("example.c"),"r",encoding="utf-8") as file:
         request = geminiRequest(API_KEY,file.read())
         writeCommentedFile(request)
     
-        
-
     # fileChunks = fileChunking(
     #     loadFilePaths(".",["^.*\.py$"]),
     #     100000
