@@ -27,8 +27,9 @@ def matchesPattern(text:str,patterns: List[str]) -> bool:
         return True
 
     for pattern in patterns:
-        if re.match(pattern,text):
+        if re.search(pattern, text):
             return True
+        
     return False
 
 def compilePatterns(patterns:List[str]) -> List[Pattern]: # not file specific so could be moved elsewhere
@@ -40,6 +41,7 @@ def needsChunked(filePath: str, byteSizeThreshold: int = 1064) -> bool :
 def getFiles(root,patterns: List[Pattern])-> List[str]:
 
     found_files = []
+
     if len(patterns) > 0:
         for root, subdirs, files in os.walk(root):
             for filename in files:                
@@ -93,7 +95,6 @@ def chunkByFunction():
 
 def handleFiles(folderPath:str,patterns: List[str], API_KEY: str):
     # for loop over files and run either geminiRequestAll or geminiRequestChunked
-
     files = [file for file in getFiles(folderPath,patterns) if matchesPattern(file,patterns)]
 
     for file in files:
