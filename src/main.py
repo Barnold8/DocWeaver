@@ -15,10 +15,12 @@ if __name__ == "__main__":
 
     # print(geminiRequest(API_KEY))
 
-    fileChunking(
+    fileChunks = fileChunking(
         loadFilePaths(".",["^.*\.py$"]),
-        
+        100000
     )
+
+
 
     
 

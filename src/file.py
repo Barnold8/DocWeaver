@@ -3,6 +3,16 @@ import os
 import re
 
 
+class File:
+
+    def __init__(self,fileName,filePath):
+        self.fileName = fileName
+        self.filePath = filePath
+        self.functions = None # this needs to be a dict that has the form 
+                        # key: "whole function as string"
+                            # or
+                        # key: [function as string chunks]
+
 def compilePatterns(patterns:List[str]) -> List[Pattern]: # not file specific so could be moved elsewhere
     return [re.compile(pattern) for pattern in patterns]
 
@@ -45,51 +55,27 @@ def loadApiKey(path: str):
 def loadFilePaths(root: str, patterns: List[str] = []) -> List[str]:
     return getFiles(relativePath(root),compilePatterns(patterns))
 
-def fileChunking(filePaths: List[str],chunkWidth: int = 4096 ) -> str:
+# TODO: chunk per function since this will be very unlikely to exceed token limit of gemini
 
-    chunks              = []
-    globalChunk         = ""
-    formatString        = ""
-    chunkSize           = 0
-    formatHeaderLength  = 9
+def fileChunking(filePaths: List[str],chunkWidth: int = 4096 ) -> List[str]:
+
+    functions = None
+
+    functionBuffer = ""
+    writingFunction = False
+    
 
     for file in filePaths:
-        with open(file, "r",encoding="utf-8") as f: 
-
-            fileName = file.split("\\")
-            fileName = fileName[len(fileName)-1]
-            
-            formatString = "="*formatHeaderLength + f"\n\nFILE: {fileName}\nPATH:{file}\ncontents:\n"
-            
-            if len(globalChunk) - len(formatString) > chunkWidth:
-                chunkSize = len(formatString)
-                chunks.append(globalChunk)
-                globalChunk += formatString
-                globalChunk = "" 
-            else:
-                
-                chunkSize += len(formatString)
-                globalChunk += formatString
-
-
+         with open(file, "r",encoding="utf-8") as f: 
             lines = f.readlines()
-
             for line in lines:
-                if len(globalChunk) - len(line)  > chunkWidth:
-                    chunkSize = len(line)
-                    chunks.append(globalChunk)
-                    globalChunk += line
-                    globalChunk = "" 
+                if not writingFunction and "def" in line:
+                    writingFunction = True
+                    functionBuffer += line
+                elif "def" in line:
+                    print(functionBuffer)
+                    exit()
                 else:
-                    chunkSize += len(line)
-                    globalChunk += line
+                    functionBuffer += line
 
-    if len(globalChunk) > 0: 
-        chunks.append(globalChunk)
-        chunks.append("="*formatHeaderLength+"\n\nEND OF THE FILE CHUNKS")
-
-    for chunk in chunks:
-        print("$"*formatHeaderLength+f"\n\nCHUNK:\n{chunk}")
-
-    return chunks
-
+            
